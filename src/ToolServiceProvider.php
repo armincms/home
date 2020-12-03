@@ -3,6 +3,7 @@
 namespace Armincms\Home;
  
 use Illuminate\Support\ServiceProvider;  
+use Laravel\Nova\Nova as LaravelNova;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,7 @@ class ToolServiceProvider extends ServiceProvider
         $this->configureMenus(); 
         $this->configureSites(); 
         \Gate::policy(Page::class, Policies\Page::class);
+        LaravelNova::serving([$this, 'servingNova']);
     } 
 
     public function configureModules()
@@ -40,11 +42,18 @@ class ToolServiceProvider extends ServiceProvider
 
     public function configureSites()
     { 
-        \Site::push('home', function($blog) { 
-            $blog
-                ->pushComponent(new Components\Tag)
+        \Site::push('home', function($home) { 
+            $home
+                ->home()
                 ->pushComponent(new Components\Page); 
         });
  
+    }
+
+    public function servingNova()
+    {
+        LaravelNova::resources([
+            Nova\Page::class,
+        ]);
     }
 }

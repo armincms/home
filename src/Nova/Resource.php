@@ -7,9 +7,7 @@ use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\{ID, Text, Textarea, Number, Password, Select}; 
 use Armincms\Nova\Resource as BaseResource;
-use Armincms\Fields\{Targomaan, BelongsToMany}; 
-use Armincms\Taggable\Nova\Tag; 
-use Outhebox\NovaHiddenField\HiddenField; 
+use Armincms\Fields\{Targomaan, BelongsToMany};  
 use Inspheric\Fields\Url;
 
 abstract class Resource extends BaseResource
@@ -48,7 +46,9 @@ abstract class Resource extends BaseResource
     {
         return $query
                     ->where('language', app()->getLocale())
-                    ->where('resource', static::class);
+                    ->when(static::class != Page::class, function($query) {
+                        $query->where('resource', static::class);
+                    });
     }
 
     /**
@@ -75,11 +75,7 @@ abstract class Resource extends BaseResource
                     }) 
                     ->labelUsing(function($value, $resource) {
                         return $this->title;
-                    }),
-                
-                HiddenField::make('resource')
-                    ->defaultValue(static::class)
-                    ->onlyOnForms(),
+                    }), 
 
                 Select::make(__('Mark As'), 'marked_as') 
                     ->options([
@@ -91,6 +87,7 @@ abstract class Resource extends BaseResource
 
                 Text::make(__('Title'), 'title')
                     ->required()
+                    ->rules('required')
                     ->onlyOnForms(), 
 
                 $this->slugField(),
@@ -108,10 +105,7 @@ abstract class Resource extends BaseResource
 
                 Number::make(__('Hits'), 'hits')
                     ->exceptOnForms(),
-            ]), 
-
-            BelongsToMany::make(__('Tags'), 'tags', Tag::class)
-                ->hideFromIndex(), 
+            ]),  
 
             (new Targomaan([ 
                 // $this->abstractField(), 
@@ -123,21 +117,7 @@ abstract class Resource extends BaseResource
                 (new Targomaan([
                     $this->imageField(),
                 ]))->withoutToolbar(),
-            ]),
-
-            $this->when($request->isMethod('put') || $request->isMethod('post'),     
-                Text::make('async')->fillUsing(function($request, $model) {  
-                    $model::saved(function($saved) use ($model) { 
-                        if($saved->is($model)) {  
-                            $tags = $model->tags()->get(); 
-
-                            $model->translations()->get()->each(function($trans) use ($model, $tags) { 
-                                $trans->tags()->sync($tags);
-                            });  
-                        }
-                    });
-                }),
-            ),
+            ]), 
         ];
     }
 
@@ -149,7 +129,7 @@ abstract class Resource extends BaseResource
     public static function newModel()
     { 
         return with(parent::newModel(), function($model) {
-            return $model->forceFill(['resource' => class_basename(static::class)]);
+            return $model->forceFill(['resource' => static::class]);
         });
     }  
 

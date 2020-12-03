@@ -6,7 +6,7 @@ class ConfigLocate
 {       
     static public function all($locale = null)
     {
-        return Page::whereLanguage($locale)->get()->map([static::class, 'information'])->toArray();
+        return Page::whereLanguage($locale ?? app()->getLocale())->get()->map([static::class, 'information'])->toArray();
     }
 
     static public function published($menu)

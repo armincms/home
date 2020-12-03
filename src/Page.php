@@ -7,8 +7,7 @@ use Armincms\Concerns\{IntractsWithMedia, Authorization};
 use Armincms\Contracts\Authorizable;
 use Armincms\Targomaan\Concerns\InteractsWithTargomaan;
 use Armincms\Targomaan\Contracts\Translatable; 
-use Armincms\Markable\Publishable;
-use Armincms\Taggable\Taggable;
+use Armincms\Markable\Publishable; 
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
@@ -18,7 +17,7 @@ use Zareismail\NovaPolicy\Contracts\Ownable;
 class Page extends Model implements HasMedia, Authorizable, Translatable, Ownable
 { 
 	use SoftDeletes, IntractsWithMedia, Authorization, InteractsWithTargomaan; 
-    use Taggable, IntractsWithSite, HasPermalink, Publishable;
+    use IntractsWithSite, HasPermalink, Publishable;
     use Sluggable {
 		scopeFindSimilarSlugs as sluggableSimilarSlugs;
 	}
