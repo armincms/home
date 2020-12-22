@@ -79,10 +79,10 @@ abstract class Resource extends BaseResource
 
                 Select::make(__('Mark As'), 'marked_as') 
                     ->options([
-                        static::getDraftVlaue() => __('Draft'), 
-                        static::getPublishVlaue() => __('Publish'), 
+                        static::getDraftValue() => __('Draft'), 
+                        static::getPublishValue() => __('Publish'), 
                     ])
-                    ->default(static::getDraftVlaue())
+                    ->default(static::getDraftValue())
                     ->displayUsingLabels(), 
 
                 Text::make(__('Title'), 'title')
