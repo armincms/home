@@ -43,7 +43,7 @@ class Page extends Model implements HasMedia, Authorizable, Translatable, Ownabl
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
