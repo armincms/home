@@ -29,5 +29,6 @@
     "prefer-stable": true,
     "require-dev": {
         "orchestra/testbench": "^5.5"
-    }
+    },
+    "version": "0.3.0"
 }
