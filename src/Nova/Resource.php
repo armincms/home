@@ -105,19 +105,23 @@ abstract class Resource extends BaseResource
 
                 Number::make(__('Hits'), 'hits')
                     ->exceptOnForms(),
+
+                $this->imageField(),
             ]),  
 
             (new Targomaan([ 
                 // $this->abstractField(), 
 
                 $this->gutenbergField(), 
-            ]))->withoutToolbar(), 
+            ]))->withoutToolbar(),  
 
-            new Panel(__('Media'), [
-                (new Targomaan([
-                    $this->imageField(),
-                ]))->withoutToolbar(),
-            ]), 
+            new Panel(__('Advanced'), [
+                new Targomaan([
+
+                    $this->seoField()
+                        ->hideFromIndex(),
+                ]),
+            ]),
         ];
     }
 
