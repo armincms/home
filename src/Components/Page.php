@@ -42,7 +42,7 @@ class Page extends Component implements Resourceable
 
 		return (string) $this
 							->firstLayout($docuemnt, $this->config('layout'), 'clean-blog')
-							->display($page->toArray(), $docuemnt->component->config('layout', [])); 
+							->display($page->toArray(), $docuemnt->component->config()); 
 	}    
 
 	public function featuredImage(string $schema = 'main')
